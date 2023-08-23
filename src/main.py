@@ -1,16 +1,20 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from src.config import config
+from src.functions import get_repos_stats
+from src.postgres_db import PostgresDB
 
 
-# Press the green button in the gutter to run the script.
+def main():
+    params = config()
+
+    stats = get_repos_stats('gamarayl')
+    db = PostgresDB('git_user_repo', params)
+    db.insert_data(stats)
+
+    for item in db.get_data(10, 'name'):
+        print(item)
+
+    db.export_to_json()
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
